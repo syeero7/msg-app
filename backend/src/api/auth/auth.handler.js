@@ -25,5 +25,5 @@ export const signinUser = asyncHandler(async (req, res) => {
 
   const token = jwt.sign({ uid: user.id }, process.env.SECRET);
 
-  res.json({ token });
+  res.json({ token, user: { id: user.id, email } });
 });
