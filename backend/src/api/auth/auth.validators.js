@@ -2,7 +2,7 @@ import { body } from "express-validator";
 import { VALIDATION_ERROR_MESSAGE } from "../../utils/constants.js";
 import prisma from "../../config/prisma-client.js";
 
-export const userValidator = [
+export const authValidator = [
   body("firstName")
     .trim()
     .isAlpha()
