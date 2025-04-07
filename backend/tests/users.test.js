@@ -38,6 +38,35 @@ describe("/users", () => {
     });
   });
 
+  describe("[GET] /users/online", () => {
+    it("should respond with online users if successful", async () => {
+      const { token } = await getSigninUserResponseBody(request, server);
+      const { statusCode, body } = await request(server)
+        .get("/users/online")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(statusCode).toBe(200);
+      expect(body).toHaveProperty("users");
+      const user = body.users[0];
+      expect(user).toHaveProperty("firstName");
+      expect(user).not.toHaveProperty("password");
+    });
+
+    it("should respond with empty users if successful", async () => {
+      const oneSecond = 1000 * 60;
+      const { token } = await getSigninUserResponseBody(request, server);
+      vi.useFakeTimers().advanceTimersByTime(oneSecond + 1);
+      const { statusCode, body } = await request(server)
+        .get("/users/online")
+        .set("Authorization", `Bearer ${token}`);
+      vi.clearAllTimers();
+
+      expect(statusCode).toBe(200);
+      expect(body).toHaveProperty("users");
+      expect(body.users).toEqual([]);
+    });
+  });
+
   describe("[GET] /users/:userId", () => {
     it("should respond with user details if successful", async () => {
       const { token, user } = await getSigninUserResponseBody(request, server);
