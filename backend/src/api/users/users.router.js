@@ -10,11 +10,13 @@ import {
   updateProfileImageUrl,
   deleteProfileImageUrl,
   updateUserProfileAboutMe,
+  getOnlineUsers,
 } from "./users.handler.js";
 
 const router = Router();
 
 router.get("/", getUsers);
+router.get("/online", getOnlineUsers);
 router.get("/:userId", validateRequest(userValidator), getUserById);
 
 router.put(

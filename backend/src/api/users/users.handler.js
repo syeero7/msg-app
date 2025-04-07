@@ -20,6 +20,16 @@ export const getUserById = asyncHandler(async (req, res) => {
   res.json({ user });
 });
 
+export const getOnlineUsers = asyncHandler(async (req, res) => {
+  const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
+  const users = await prisma.user.findMany({
+    where: { lastActiveAt: { gte: oneMinuteAgo } },
+    omit: { password: true },
+  });
+
+  res.json({ users });
+});
+
 export const updateProfileImageUrl = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   const filepath = `${userId}/avatar`;
