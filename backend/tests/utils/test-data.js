@@ -1,4 +1,5 @@
 import sharp from "sharp";
+import prisma from "../../src/config/prisma-client";
 
 export const userInput = {
   firstName: "John",
@@ -8,11 +9,47 @@ export const userInput = {
   confirmPassword: "password",
 };
 
-export const getSigninUserResponseBody = async (request, server) => {
-  await request(server).post("/auth/signup").send(userInput);
-  const { email, password } = userInput;
+export const getSigninUserResponseBody = async (request, server, data = userInput) => {
+  await request(server).post("/auth/signup").send(data);
+  const { email, password } = data;
   const { body } = await request(server).post("/auth/signin").send({ email, password });
   return body;
+};
+
+const createGroup = (creatorId, memberIds) => {
+  const members = [creatorId, ...memberIds];
+  return prisma.group.create({
+    data: {
+      name: "test",
+      creator: {
+        connect: {
+          id: creatorId,
+        },
+      },
+      members: {
+        createMany: {
+          data: members.map((userId) => ({ userId })),
+        },
+      },
+    },
+    include: { members: true },
+  });
+};
+
+const users = [
+  { ...userInput, email: "joeOn@mail.com" },
+  { ...userInput, email: "doeJJ01@mail.com" },
+];
+
+export const createUserGroups = async (userId, request, server) => {
+  const { user: user1 } = await getSigninUserResponseBody(request, server, users[0]);
+  const { user: user2 } = await getSigninUserResponseBody(request, server, users[1]);
+
+  return await prisma.$transaction([
+    createGroup(userId, [user1.id, user2.id]),
+    createGroup(user1.id, [userId, user2.id]),
+    createGroup(user1.id, [user2.id]),
+  ]);
 };
 
 export const createTestImage = async (imageSize) => {
