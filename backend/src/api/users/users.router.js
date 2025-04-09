@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/validate-request.js";
 import validateImage from "../../middleware/validate-image.js";
-import { userValidator } from "./users.validators.js";
+import { userDetailsValidator, paramsValidator } from "./users.validators.js";
 import { upload } from "../../config/multer.js";
 import {
   getUsers,
@@ -16,26 +16,27 @@ const router = Router();
 
 router.get("/", getUsers);
 router.get("/online", getOnlineUsers);
-router.get("/:userId", validateRequest(userValidator), getUserById);
+router.get("/:userId", validateRequest(paramsValidator), getUserById);
 
 router.put(
   "/:userId/avatar",
+  validateRequest(paramsValidator),
   authorize,
   validateImage(upload.single("avatar")),
-  validateRequest(userValidator),
   updateProfileImageUrl
 );
 router.put(
   "/:userId/about",
+  validateRequest(paramsValidator),
   authorize,
-  validateRequest(userValidator),
+  validateRequest(userDetailsValidator),
   updateUserProfileAboutMe
 );
 
 router.delete(
   "/:userId/avatar",
+  validateRequest(paramsValidator),
   authorize,
-  validateRequest(userValidator),
   deleteProfileImageUrl
 );
 
@@ -43,6 +44,6 @@ export default router;
 
 function authorize(req, res, next) {
   if (req.user && req.method === "GET") return next();
-  if (Number(req.params.userId) === req.user.id) return next();
+  if (req.params.userId === req.user.id) return next();
   return res.sendStatus(403);
 }
