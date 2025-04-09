@@ -11,6 +11,7 @@ server.use(express.json());
 
 server.use("/auth", routes.auth);
 server.use("/users", authenticate, routes.users);
+server.use("/groups", authenticate, routes.groups);
 
 server.use(errorHandler);
 
