@@ -52,10 +52,10 @@ export const createUserGroups = async (userId, request, server) => {
   ]);
 };
 
-export const createTestImage = async (imageSize) => {
+export const createTestImage = async (imageWidth, imageHight) => {
   const imgOptions = {
-    width: imageSize,
-    height: imageSize,
+    width: imageWidth,
+    height: imageHight,
     channels: 3,
     background: { r: 255, g: 255, b: 255 },
   };

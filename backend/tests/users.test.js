@@ -7,10 +7,8 @@ import {
   getSigninUserResponseBody,
 } from "./utils/test-data.js";
 import { cloudinaryAPI } from "../src/utils/Cloudianry.js";
-import {
-  MAX_FILE_UPLOAD_SIZE_IN_MEGA_BYTES as MAX_FILE_SIZE,
-  UPLOAD_IMAGE_SIZE_IN_PIXELS as UPLOAD_IMAGE_SIZE,
-} from "../src/utils/constants.js";
+import { AVATAR_DIMENSIONS, MAX_AVATAR_UPLOAD_SIZE } from "../src/utils/constants.js";
+const { width: AVATAR_WIDTH, height: AVATAR_HEIGHT } = AVATAR_DIMENSIONS;
 
 vi.mock("../src/utils/Cloudianry.js", {
   cloudinaryAPI: { uploadFile: vi.fn(), deleteFile: vi.fn() },
@@ -111,7 +109,7 @@ describe("/users", () => {
     it("should respond with 204 status code if successfully updated the user avatar", async () => {
       vi.mocked(cloudinaryAPI.uploadFile).mockResolvedValue("image-url");
 
-      const testImage = await createTestImage(UPLOAD_IMAGE_SIZE);
+      const testImage = await createTestImage(AVATAR_WIDTH, AVATAR_HEIGHT);
       const { token, user } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
         .put(`/users/${user.id}/avatar`)
@@ -121,8 +119,8 @@ describe("/users", () => {
       expect(statusCode).toBe(204);
     });
 
-    it(`should respond with 400 status code if file size is more than ${MAX_FILE_SIZE}MB`, async () => {
-      const testImage = await createTestImageBuffer(MAX_FILE_SIZE + 1);
+    it(`should respond with 400 status code if file size is more than ${MAX_AVATAR_UPLOAD_SIZE}MB`, async () => {
+      const testImage = await createTestImageBuffer(MAX_AVATAR_UPLOAD_SIZE + 1);
       const { token, user } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
         .put(`/users/${user.id}/avatar`)
@@ -132,8 +130,9 @@ describe("/users", () => {
       expect(statusCode).toBe(400);
     });
 
-    it(`should respond with 400 status code if image width/hight more than ${UPLOAD_IMAGE_SIZE}px`, async () => {
-      const testImage = await createTestImage(UPLOAD_IMAGE_SIZE + 1);
+    // avatar width and height are equal
+    it(`should respond with 400 status code if image width/hight more than ${AVATAR_WIDTH}px`, async () => {
+      const testImage = await createTestImage(AVATAR_WIDTH + 1, AVATAR_HEIGHT);
       const { token, user } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
         .put(`/users/${user.id}/avatar`)
@@ -167,7 +166,7 @@ describe("/users", () => {
   describe("[DELETE] /users/:userId", () => {
     it("should respond with 204 status code if successfully deleted the user avatar", async () => {
       vi.mocked(cloudinaryAPI.uploadFile).mockResolvedValue("image-url");
-      const testImage = await createTestImage(UPLOAD_IMAGE_SIZE);
+      const testImage = await createTestImage(AVATAR_WIDTH, AVATAR_HEIGHT);
       const { token, user } = await getSigninUserResponseBody(request, server);
       await request(server)
         .put(`/users/${user.id}/avatar`)
