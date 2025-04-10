@@ -1,10 +1,6 @@
 import sharp from "sharp";
-import {
-  UPLOAD_IMAGE_SIZE_IN_PIXELS as UPLOAD_IMAGE_SIZE,
-  MAX_FILE_UPLOAD_SIZE_IN_MEGA_BYTES as MAX_FILE_SIZE,
-} from "../utils/constants.js";
 
-const validateImage = (multer) => {
+const validateImage = (multer, fieSize, imageWidth, imageHight, imageSizeCondition) => {
   return [
     multer,
     async (req, res, next) => {
@@ -23,17 +19,22 @@ const validateImage = (multer) => {
         return next(err);
       }
 
-      if (size / (1024 * 1024) > MAX_FILE_SIZE) {
-        const err = new Error(
-          `File size exceeds the maximum limit of ${MAX_FILE_SIZE}MB`
-        );
+      if (size / (1024 * 1024) > fieSize) {
+        const err = new Error(`File size exceeds the maximum limit of ${fieSize}MB`);
         err.statusCode = 400;
         return next(err);
       }
 
       const { height, width } = await sharp(buffer).metadata();
-      if (height !== UPLOAD_IMAGE_SIZE || width !== UPLOAD_IMAGE_SIZE) {
-        const err = new Error(`uploaded image size must be ${UPLOAD_IMAGE_SIZE}px`);
+      const isImageSizeError =
+        imageSizeCondition === "!=="
+          ? height !== imageHight || width !== imageWidth
+          : imageSizeCondition === ">"
+          ? height > imageHight || width > imageWidth
+          : false;
+
+      if (isImageSizeError) {
+        const err = new Error(`uploaded image must be ${imageWidth} x ${imageHight}`);
         err.statusCode = 400;
         return next(err);
       }

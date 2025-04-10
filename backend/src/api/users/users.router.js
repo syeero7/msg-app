@@ -1,8 +1,10 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/validate-request.js";
-import validateImage from "../../middleware/validate-image.js";
-import { userDetailsValidator, paramsValidator } from "./users.validators.js";
-import { upload } from "../../config/multer.js";
+import {
+  userDetailsValidator,
+  paramsValidator,
+  validateAvatar,
+} from "./users.validators.js";
 import {
   getUsers,
   getUserById,
@@ -22,7 +24,7 @@ router.put(
   "/:userId/avatar",
   validateRequest(paramsValidator),
   authorize,
-  validateImage(upload.single("avatar")),
+  validateAvatar,
   updateProfileImageUrl
 );
 router.put(

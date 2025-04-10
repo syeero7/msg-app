@@ -5,6 +5,5 @@ export const VALIDATION_ERROR_MESSAGE = {
   lengthRange: (min, max) => `must be between ${min} and ${max} characters`,
 };
 
-export const MAX_FILE_UPLOAD_SIZE_IN_MEGA_BYTES = 3;
-
-export const UPLOAD_IMAGE_SIZE_IN_PIXELS = 300;
+export const MAX_AVATAR_UPLOAD_SIZE = 3;
+export const AVATAR_DIMENSIONS = { height: 300, width: 300 };
