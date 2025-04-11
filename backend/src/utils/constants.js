@@ -6,4 +6,6 @@ export const VALIDATION_ERROR_MESSAGE = {
 };
 
 export const MAX_AVATAR_UPLOAD_SIZE = 3;
+export const MAX_IMAGE_UPLOAD_SIZE = 5;
 export const AVATAR_DIMENSIONS = { height: 300, width: 300 };
+export const IMAGE_DIMENSIONS = { height: 2000, width: 2000 };
