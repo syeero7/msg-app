@@ -1,10 +1,14 @@
 import express from "express";
+import cors from "cors";
 import "./config/passport.js";
 import routes from "./api";
 import authenticate from "./middleware/authenticate.js";
 import errorHandler from "./middleware/error-handler.js";
+import { corsOptions } from "./config/cors.js";
 
 const server = express();
+
+server.use(cors(corsOptions));
 
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
