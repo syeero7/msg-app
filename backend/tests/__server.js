@@ -10,8 +10,10 @@ server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 
 server.use("/auth", routes.auth);
-server.use("/users", authenticate, routes.users);
-server.use("/groups", authenticate, routes.groups);
+server.use(authenticate);
+server.use("/users", routes.users);
+server.use("/groups", routes.groups);
+server.use("/messages", routes.messages);
 
 server.use(errorHandler);
 

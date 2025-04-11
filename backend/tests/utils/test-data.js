@@ -9,7 +9,9 @@ export const userInput = {
   confirmPassword: "password",
 };
 
-export const getSigninUserResponseBody = async (request, server, data = userInput) => {
+export const getSigninUserResponseBody = async (request, server, data) => {
+  const suffix = Math.random().toString(36).slice(2);
+  if (!data) data = { ...userInput, email: `john${suffix}@mail.com` };
   await request(server).post("/auth/signup").send(data);
   const { email, password } = data;
   const { body } = await request(server).post("/auth/signin").send({ email, password });
@@ -36,14 +38,9 @@ const createGroup = (creatorId, memberIds) => {
   });
 };
 
-const users = [
-  { ...userInput, email: "joeOn@mail.com" },
-  { ...userInput, email: "doeJJ01@mail.com" },
-];
-
 export const createUserGroups = async (userId, request, server) => {
-  const { user: user1 } = await getSigninUserResponseBody(request, server, users[0]);
-  const { user: user2 } = await getSigninUserResponseBody(request, server, users[1]);
+  const { user: user1 } = await getSigninUserResponseBody(request, server);
+  const { user: user2 } = await getSigninUserResponseBody(request, server);
 
   return await prisma.$transaction([
     createGroup(userId, [user1.id, user2.id]),
@@ -68,4 +65,22 @@ export const createTestImageBuffer = async (size) => {
   const arrayBuffer = new ArrayBuffer(bytes);
   const blob = new Blob([arrayBuffer], { type: "image/png" });
   return Buffer.from(await blob.arrayBuffer());
+};
+
+export const sendTestMessage = async (type, senderId, token, request, server) => {
+  if (senderId === null && token === null) {
+    const body = await getSigninUserResponseBody(request, server);
+    senderId = body.user.id;
+    token = body.token;
+  }
+  const { user: user2 } = await getSigninUserResponseBody(request, server);
+  const group = type === "GROUP" && (await createGroup(senderId, [user2.id]));
+  const recipientId = type === "DIRECT" ? user2.id : group.id;
+
+  await request(server)
+    .post(`/messages/${type.toLowerCase()}/${recipientId}/text`)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ text: "test message" });
+
+  return recipientId;
 };
