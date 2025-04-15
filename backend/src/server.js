@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import "./config/passport.js";
-import routes from "./api";
+import routes from "./api/index.js";
 import authenticate from "./middleware/authenticate.js";
 import errorHandler from "./middleware/error-handler.js";
+import updateUserLastActiveAt from "./middleware/update-user-last-active-at.js";
 import { corsOptions } from "./config/cors.js";
 
 const server = express();
@@ -15,6 +16,7 @@ server.use(express.json());
 
 server.use("/auth", routes.auth);
 server.use(authenticate);
+server.use(updateUserLastActiveAt);
 server.use("/users", routes.users);
 server.use("/groups", routes.groups);
 server.use("/messages", routes.messages);

@@ -3,7 +3,11 @@ import prisma from "../../config/prisma-client.js";
 import { cloudinaryAPI } from "../../utils/Cloudianry.js";
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const users = await prisma.user.findMany({ omit: { password: true } });
+  const userId = req.user.id;
+  const users = await prisma.user.findMany({
+    omit: { password: true },
+    where: { NOT: { id: userId } },
+  });
 
   res.json({ users });
 });
@@ -21,9 +25,13 @@ export const getUserById = asyncHandler(async (req, res) => {
 });
 
 export const getOnlineUsers = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
   const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
   const users = await prisma.user.findMany({
-    where: { lastActiveAt: { gte: oneMinuteAgo } },
+    where: {
+      lastActiveAt: { gte: oneMinuteAgo },
+      NOT: { id: userId },
+    },
     omit: { password: true },
   });
 
