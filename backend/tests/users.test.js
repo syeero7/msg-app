@@ -24,6 +24,7 @@ describe("/users", () => {
 
     it("should respond with users data if successful", async () => {
       const { token } = await getSigninUserResponseBody(request, server);
+      await getSigninUserResponseBody(request, server); // 2nd user
       const { statusCode, body } = await request(server)
         .get("/users")
         .set("Authorization", `Bearer ${token}`);
@@ -39,6 +40,7 @@ describe("/users", () => {
   describe("[GET] /users/online", () => {
     it("should respond with online users if successful", async () => {
       const { token } = await getSigninUserResponseBody(request, server);
+      await getSigninUserResponseBody(request, server); // 2nd user
       const { statusCode, body } = await request(server)
         .get("/users/online")
         .set("Authorization", `Bearer ${token}`);
