@@ -20,32 +20,9 @@ router.get("/", getUsers);
 router.get("/online", getOnlineUsers);
 router.get("/:userId", validateRequest(paramsValidator), getUserById);
 
-router.put(
-  "/:userId/avatar",
-  validateRequest(paramsValidator),
-  authorize,
-  validateAvatar,
-  updateProfileImageUrl
-);
-router.put(
-  "/:userId/about",
-  validateRequest(paramsValidator),
-  authorize,
-  validateRequest(userDetailsValidator),
-  updateUserProfileAboutMe
-);
+router.put("/avatar", validateAvatar, updateProfileImageUrl);
+router.put("/about", validateRequest(userDetailsValidator), updateUserProfileAboutMe);
 
-router.delete(
-  "/:userId/avatar",
-  validateRequest(paramsValidator),
-  authorize,
-  deleteProfileImageUrl
-);
+router.delete("/avatar", deleteProfileImageUrl);
 
 export default router;
-
-function authorize(req, res, next) {
-  if (req.user && req.method === "GET") return next();
-  if (req.params.userId === req.user.id) return next();
-  return res.sendStatus(403);
-}

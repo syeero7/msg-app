@@ -39,7 +39,7 @@ export const getOnlineUsers = asyncHandler(async (req, res) => {
 });
 
 export const updateProfileImageUrl = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user.id;
   const filepath = `${userId}/avatar`;
 
   const url = await cloudinaryAPI.uploadFile(req.file, filepath);
@@ -49,7 +49,7 @@ export const updateProfileImageUrl = asyncHandler(async (req, res) => {
 });
 
 export const deleteProfileImageUrl = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user.id;
   const filepath = `${userId}/avatar`;
 
   await cloudinaryAPI.deleteFile(filepath);
@@ -59,7 +59,7 @@ export const deleteProfileImageUrl = asyncHandler(async (req, res) => {
 });
 
 export const updateUserProfileAboutMe = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const userId = req.user.id;
   const { aboutMe } = req.body;
 
   await prisma.user.update({ where: { id: userId }, data: { aboutMe } });
