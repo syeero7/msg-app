@@ -98,23 +98,14 @@ describe("/users", () => {
     });
   });
 
-  describe("[PUT] /users/:userId", () => {
-    it("should respond with 403 status code if userId param not equal to authenticated users id", async () => {
-      const { token } = await getSigninUserResponseBody(request, server);
-      const { statusCode } = await request(server)
-        .put("/users/0/avatar")
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(statusCode).toBe(403);
-    });
-
+  describe("[PUT] /users/avatar", () => {
     it("should respond with 204 status code if successfully updated the user avatar", async () => {
       vi.mocked(cloudinaryAPI.uploadFile).mockResolvedValue("image-url");
 
       const testImage = await createTestImage(AVATAR_WIDTH, AVATAR_HEIGHT);
-      const { token, user } = await getSigninUserResponseBody(request, server);
+      const { token } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
-        .put(`/users/${user.id}/avatar`)
+        .put(`/users/avatar`)
         .set("Authorization", `Bearer ${token}`)
         .attach("avatar", testImage, "test.png");
 
@@ -123,9 +114,9 @@ describe("/users", () => {
 
     it(`should respond with 400 status code if file size is more than ${MAX_AVATAR_UPLOAD_SIZE}MB`, async () => {
       const testImage = await createTestImageBuffer(MAX_AVATAR_UPLOAD_SIZE + 1);
-      const { token, user } = await getSigninUserResponseBody(request, server);
+      const { token } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
-        .put(`/users/${user.id}/avatar`)
+        .put(`/users/avatar`)
         .set("Authorization", `Bearer ${token}`)
         .attach("avatar", testImage, "test.png");
 
@@ -135,19 +126,21 @@ describe("/users", () => {
     // avatar width and height are equal
     it(`should respond with 400 status code if image width/hight more than ${AVATAR_WIDTH}px`, async () => {
       const testImage = await createTestImage(AVATAR_WIDTH + 1, AVATAR_HEIGHT);
-      const { token, user } = await getSigninUserResponseBody(request, server);
+      const { token } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
-        .put(`/users/${user.id}/avatar`)
+        .put(`/users/avatar`)
         .set("Authorization", `Bearer ${token}`)
         .attach("avatar", testImage, "test.png");
 
       expect(statusCode).toBe(400);
     });
+  });
 
+  describe("[PUT] /users/about", () => {
     it("should respond with 400 status code if about me field have more than 200 characters", async () => {
-      const { token, user } = await getSigninUserResponseBody(request, server);
+      const { token } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
-        .put(`/users/${user.id}/about`)
+        .put(`/users/about`)
         .set("Authorization", `Bearer ${token}`)
         .send({ aboutMe: "a".repeat(201) });
 
@@ -155,9 +148,9 @@ describe("/users", () => {
     });
 
     it("should respond with 204 status code if successfully updated about me", async () => {
-      const { token, user } = await getSigninUserResponseBody(request, server);
+      const { token } = await getSigninUserResponseBody(request, server);
       const { statusCode } = await request(server)
-        .put(`/users/${user.id}/about`)
+        .put(`/users/about`)
         .set("Authorization", `Bearer ${token}`)
         .send({ aboutMe: "a".repeat(100) });
 
@@ -165,30 +158,21 @@ describe("/users", () => {
     });
   });
 
-  describe("[DELETE] /users/:userId", () => {
+  describe("[DELETE] /users/avatar", () => {
     it("should respond with 204 status code if successfully deleted the user avatar", async () => {
       vi.mocked(cloudinaryAPI.uploadFile).mockResolvedValue("image-url");
       const testImage = await createTestImage(AVATAR_WIDTH, AVATAR_HEIGHT);
-      const { token, user } = await getSigninUserResponseBody(request, server);
+      const { token } = await getSigninUserResponseBody(request, server);
       await request(server)
-        .put(`/users/${user.id}/avatar`)
+        .put(`/users/avatar`)
         .set("Authorization", `Bearer ${token}`)
         .attach("avatar", testImage, "test.png");
 
       const { statusCode } = await request(server)
-        .delete(`/users/${user.id}/avatar`)
+        .delete(`/users/avatar`)
         .set("Authorization", `Bearer ${token}`);
 
       expect(statusCode).toBe(204);
-    });
-
-    it("should respond with 403 status code if userId param not equal to authenticated users id", async () => {
-      const { token } = await getSigninUserResponseBody(request, server);
-      const { statusCode } = await request(server)
-        .delete("/users/0/avatar")
-        .set("Authorization", `Bearer ${token}`);
-
-      expect(statusCode).toBe(403);
     });
   });
 });
