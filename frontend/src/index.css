@@ -7,4 +7,79 @@
 
 :root {
   --ff-sans-serif: "Inter", sans-serif;
+
+  --text: oklch(12.72% 0.031 155.06);
+  --background: oklch(99.09% 0.013 159.93);
+  --primary: oklch(82.77% 0.246 146.45);
+  --secondary: oklch(75.19% 0.151 233.11);
+  --accent: oklch(70% 0.175 25.83);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: oklch(99.06% 0.014 155.6);
+    --background: oklch(12.78% 0.029 160.03);
+    --primary: oklch(81.13% 0.243 146.27);
+    --secondary: oklch(67.9% 0.145 235.44);
+    --accent: oklch(44.1% 0.173 29.54);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--ff-sans-serif);
+  line-height: 1.5;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+:any-link {
+  color: var(--text);
+  text-decoration: none;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+h1 {
+  font-size: clamp(2.12em, 5vw, 3.053rem);
+}
+
+h2 {
+  font-size: 2.442rem;
+}
+
+h3 {
+  font-size: 1.954rem;
+}
+
+h4 {
+  font-size: 1.563rem;
+}
+
+h5 {
+  font-size: 1.25rem;
 }
