@@ -15,12 +15,14 @@ function Signin() {
       <AuthForm action={formAction}>
         <FormField
           label="Email"
+          name="email"
           type="email"
           error={errors?.email}
           autoComplete="e-mail"
         />
         <FormField
           label="Password"
+          name="password"
           type="password"
           error={errors?.email}
           autoComplete="current-password"

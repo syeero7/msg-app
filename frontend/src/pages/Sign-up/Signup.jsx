@@ -12,22 +12,25 @@ function Signup() {
     <main className={styles.container}>
       <h1 className={styles.text}>Create an account</h1>
       <AuthForm action={formAction}>
-        <FormField label="First name" error={errors?.firstName} />
-        <FormField label="Last name" error={errors?.lastName} />
+        <FormField label="First name" name="firstName" error={errors?.firstName} />
+        <FormField label="Last name" name="lastName" error={errors?.lastName} />
         <FormField
           label="Email"
+          name="email"
           error={errors?.email}
           type="email"
           autoComplete="e-mail"
         />
         <FormField
           label="Password"
+          name="password"
           error={errors?.password}
           type="password"
           autoComplete="new-password"
         />
         <FormField
           label="Confirm password"
+          name="confirmPassword"
           error={errors?.confirmPassword}
           type="password"
           autoComplete="new-password"
