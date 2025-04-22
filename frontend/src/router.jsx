@@ -4,8 +4,8 @@ import App from "./App";
 import RouteController from "./components/RouteController";
 
 import Home from "./pages/Home";
-import Signin from "./pages/Sign-in";
-import Signup from "./pages/Sign-up";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
 
 const router = createBrowserRouter([
   {

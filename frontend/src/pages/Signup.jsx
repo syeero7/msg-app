@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthForm from "../../components/AuthForm";
-import FormField from "../../components/FormField";
-import { createUser } from "../../utils/api";
-import styles from "./Signup.module.css";
+import AuthForm from "../components/AuthForm";
+import FormField from "../components/FormField";
+import { createUser } from "../utils/api";
 
 function Signup() {
   const { errors, formAction } = useFormController();
 
   return (
-    <main className={styles.container}>
-      <h1 className={styles.text}>Create an account</h1>
+    <main className="auth-container">
+      <h1 className="auth-text">Create an account</h1>
       <AuthForm action={formAction}>
         <FormField label="First name" name="firstName" error={errors?.firstName} />
         <FormField label="Last name" name="lastName" error={errors?.lastName} />
@@ -36,7 +35,7 @@ function Signup() {
           autoComplete="new-password"
         />
         <AuthForm.SubmitButton>Sign-up</AuthForm.SubmitButton>
-        <p className={styles.text}>
+        <p className="auth-text">
           Already have an account? <Link to="/sign-in">Sign-in</Link>
         </p>
       </AuthForm>

@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import FormField from "../../components/FormField";
-import AuthForm from "../../components/AuthForm";
-import { useAuth } from "../../components/AuthProvider";
-import { signinUser } from "../../utils/api";
-import styles from "./Signin.module.css";
+import FormField from "../components/FormField";
+import AuthForm from "../components/AuthForm";
+import { useAuth } from "../components/AuthProvider";
+import { signinUser } from "../utils/api";
 
 function Signin() {
   const { errors, formAction } = useFormController();
 
   return (
-    <main className={styles.container}>
-      <h1 className={styles.text}>Sign-in to your account</h1>
+    <main className="auth-container">
+      <h1 className="auth-text">Sign-in to your account</h1>
       <AuthForm action={formAction}>
         <FormField
           label="Email"
@@ -28,7 +27,7 @@ function Signin() {
           autoComplete="current-password"
         />
         <AuthForm.SubmitButton>Sign-in</AuthForm.SubmitButton>
-        <p className={styles.text}>
+        <p className="auth-text">
           Don&apos;t have an account? <Link to="/sign-up">Sign-up</Link>
         </p>
       </AuthForm>
