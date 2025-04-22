@@ -1,11 +1,9 @@
 import { body, param } from "express-validator";
 import { upload } from "../../config/multer.js";
 import validateImage from "../../middleware/validate-image.js";
-import {
-  VALIDATION_ERROR_MESSAGE,
-  AVATAR_DIMENSIONS,
-  MAX_AVATAR_UPLOAD_SIZE,
-} from "../../utils/constants.js";
+
+const AVATAR_MAX_UPLOAD_SIZE = 3; //file size  MB
+const AVATAR_SIZE = 300; // width & height  px
 
 export const paramsValidator = [
   param("userId").toInt().isNumeric().withMessage("invalid param type"),
@@ -14,13 +12,13 @@ export const paramsValidator = [
 export const userDetailsValidator = [
   body("aboutMe")
     .isLength({ max: 200 })
-    .withMessage(`About Me ${VALIDATION_ERROR_MESSAGE.maxLength(200)}`),
+    .withMessage("About Me cannot exceed 200 characters"),
 ];
 
 export const validateAvatar = validateImage(
   upload.single("avatar"),
-  MAX_AVATAR_UPLOAD_SIZE,
-  AVATAR_DIMENSIONS.width,
-  AVATAR_DIMENSIONS.height,
+  AVATAR_MAX_UPLOAD_SIZE,
+  AVATAR_SIZE,
+  AVATAR_SIZE,
   "!=="
 );

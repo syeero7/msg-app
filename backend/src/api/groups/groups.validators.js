@@ -1,5 +1,4 @@
 import { body, param } from "express-validator";
-import { VALIDATION_ERROR_MESSAGE } from "../../utils/constants.js";
 import prisma from "../../config/prisma-client.js";
 
 export const paramValidator = [
@@ -12,9 +11,9 @@ export const newGroupValidator = [
     .notEmpty()
     .withMessage("Name must not be empty")
     .isAlpha("en-US", { ignore: /\s/ })
-    .withMessage(`Name ${VALIDATION_ERROR_MESSAGE.letter}`)
+    .withMessage("Name must only contain letters")
     .isLength({ max: 20 })
-    .withMessage(`Name ${VALIDATION_ERROR_MESSAGE.maxLength(20)}`),
+    .withMessage("Name cannot exceed 20 characters"),
 ];
 
 export const groupMembersValidator = [
