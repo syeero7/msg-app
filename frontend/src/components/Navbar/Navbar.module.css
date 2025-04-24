@@ -2,7 +2,9 @@
   min-width: 200px;
   height: auto;
   background-color: var(--background);
-  padding: 0.5em;
+  padding-inline: 1em 0.5em;
+  padding-block: 1.5em;
+  transform: translateX(0.55em);
 
   & ul {
     height: 100%;
@@ -24,9 +26,10 @@
   display: flex;
   gap: 1em;
   place-items: center;
-  font-size: 1.2em;
+  font-size: 1.15em;
   padding: 0.6em 1.3em;
   font-weight: 500;
+  white-space: nowrap;
   border-radius: 6px;
 }
 
@@ -38,6 +41,12 @@ button.item {
 
   &:focus-visible,
   &:active {
+    border-color: hsl(from var(--accent) h s 40%);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button.item:hover {
     border-color: hsl(from var(--accent) h s 40%);
   }
 }
@@ -62,7 +71,8 @@ button.item {
 @media screen and (max-width: 60em) {
   .nav {
     border-top: 2px solid var(--text);
-    padding-top: 1em;
+    padding-inline: 0.5em;
+    padding-block: 1em 0.5em;
     flex: 0 1 5.5rem;
     min-height: 5.5rem;
 
@@ -82,7 +92,6 @@ button.item {
     font-size: 0.75em;
     flex-wrap: wrap;
     justify-content: center;
-    white-space: nowrap;
     padding: 0.3em;
   }
 }
