@@ -6,7 +6,7 @@ function RouteController({ type }) {
 
   switch (type) {
     case "public":
-      return !user ? <Outlet /> : <Navigate to="/chat" replace />;
+      return !user ? <Outlet /> : <Navigate to="/chat/users/all" replace />;
 
     case "private":
       return user ? <Outlet /> : <Navigate to="/" replace />;
