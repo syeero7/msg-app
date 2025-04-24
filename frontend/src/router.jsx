@@ -6,6 +6,8 @@ import RouteController from "./components/RouteController";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import UserChat, { getLoader as getUserChatLoader } from "./pages/UserChat";
+import GroupChat, { getLoader as getGroupChatLoader } from "./pages/GroupChat";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +24,43 @@ const router = createBrowserRouter([
       },
       {
         element: <RouteController type="private" />,
-        children: [],
+        children: [
+          {
+            path: "chat/users",
+            children: [
+              {
+                path: "all",
+                Component: UserChat,
+                loader: getUserChatLoader("all"),
+              },
+              {
+                path: "online",
+                Component: UserChat,
+                loader: getUserChatLoader("online"),
+              },
+              {
+                path: ":userId",
+                Component: UserChat,
+                loader: getUserChatLoader("messages"),
+              },
+            ],
+          },
+          {
+            path: "chat/groups",
+            children: [
+              {
+                index: true,
+                Component: GroupChat,
+                loader: getGroupChatLoader("all"),
+              },
+              {
+                path: ":groupId",
+                Component: GroupChat,
+                loader: getGroupChatLoader("messages"),
+              },
+            ],
+          },
+        ],
       },
     ],
   },

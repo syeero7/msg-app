@@ -126,7 +126,51 @@ export const getDirectMessages = (userId) => {
   return fetch(`${API_URL}/messages/direct/${userId}`, options);
 };
 
+export const sendDirectMessage = (userId, value, type) => {
+  const isText = type === "text";
+  let formData;
+
+  if (type === "image") {
+    formData = new FormData();
+    formData.append(type, value);
+  }
+
+  const options = {
+    method: "POST",
+    headers: { ...getAuthorizationHeader(), ...(isText && getJSONHeader()) },
+    body: isText ? JSON.stringify({ [type]: value }) : formData,
+  };
+
+  return fetch(`${API_URL}/messages/direct/${userId}/${type}`, options);
+};
+
 // -- GROUP MESSAGES --
+
+export const getGroupMessages = (groupId) => {
+  const options = {
+    headers: getAuthorizationHeader(),
+  };
+
+  return fetch(`${API_URL}/messages/group/${groupId}`, options);
+};
+
+export const sendGroupMessages = (groupId, value, type) => {
+  const isText = type === "text";
+  let formData;
+
+  if (type === "image") {
+    formData = new FormData();
+    formData.append(type, value);
+  }
+
+  const options = {
+    method: "POST",
+    headers: { ...getAuthorizationHeader(), ...(isText && getJSONHeader()) },
+    body: isText ? JSON.stringify({ [type]: value }) : formData,
+  };
+
+  return fetch(`${API_URL}/messages/group/${groupId}/${type}`, options);
+};
 
 // --
 

@@ -25,12 +25,6 @@
   }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   background-color: var(--background);
   color: var(--text);
@@ -47,10 +41,16 @@ body {
   text-decoration: none;
 }
 
+li {
+  list-style: none;
+}
+
 #root {
+  flex: 1;
+  display: flex;
+  place-content: center;
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem;
+  margin-inline: auto;
 }
 
 button {
@@ -65,23 +65,16 @@ textarea {
 }
 
 h1 {
-  font-size: clamp(2.12em, 5vw, 3.053rem);
+  font-size: clamp(2.2em, 2vw, 2.6rem);
 }
 
-h2 {
-  font-size: 2.442rem;
-}
+a:has(.lucide) {
+  transition: color 0.25s ease-in-out;
 
-h3 {
-  font-size: 1.954rem;
-}
-
-h4 {
-  font-size: 1.563rem;
-}
-
-h5 {
-  font-size: 1.25rem;
+  &:focus-within,
+  &.active {
+    color: hsl(from var(--secondary) h s 34%);
+  }
 }
 
 .auth-container {
@@ -115,8 +108,98 @@ p.auth-text {
   }
 }
 
+.chat-layout {
+  flex: 1;
+  margin: 2em 1em;
+  display: flex;
+  height: 750px;
+  gap: 0.5em;
+  overflow: hidden;
+  border: 2px solid var(--text);
+  border-radius: 24px;
+
+  & > div:first-child {
+    display: flex;
+    justify-content: space-evenly;
+    flex: 1;
+  }
+}
+
+.chat-box-container {
+  flex: 1 1 650px;
+  min-width: 320px;
+  border-radius: 6px;
+  margin-right: 0.5em;
+}
+
+.chat-contacts {
+  border-inline: 2px solid var(--text);
+  margin-inline-start: 2em;
+  padding: 0.5em;
+  flex: 1;
+  max-width: 320px;
+  min-width: 320px;
+}
+
+.back-btn {
+  display: none;
+}
+
+@media screen and (max-width: 60em) {
+  .back-btn {
+    display: block;
+  }
+
+  .chat-layout {
+    margin: 0;
+    height: unset;
+    min-height: 100vh;
+    border: unset;
+    border-radius: unset;
+
+    & > div:first-child {
+      flex-direction: column-reverse;
+    }
+
+    &.reverse {
+      flex-direction: column-reverse;
+
+      & > div:first-child {
+        display: none;
+      }
+    }
+  }
+
+  .chat-contacts {
+    border-inline: unset;
+    padding: 0.5em;
+    min-width: 100%;
+    margin-inline: auto;
+
+    &.hide-element {
+      display: none;
+    }
+  }
+
+  .chat-box-container {
+    display: none;
+
+    &.show-element {
+      display: flex;
+      flex: 1 1 auto;
+      border-radius: unset;
+      margin: unset;
+      max-width: max(320px, 100vw);
+    }
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   p.auth-text a:hover {
+    color: hsl(from var(--secondary) h s 34%);
+  }
+
+  a:has(.lucide):hover {
     color: hsl(from var(--secondary) h s 34%);
   }
 }
@@ -128,10 +211,21 @@ p.auth-text {
       color: var(--secondary);
     }
   }
+
+  a:has(.lucide) {
+    &:focus-within,
+    &.active {
+      color: var(--secondary);
+    }
+  }
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
   p.auth-text a:hover {
+    color: var(--secondary);
+  }
+
+  a:has(.lucide):hover {
     color: var(--secondary);
   }
 }
