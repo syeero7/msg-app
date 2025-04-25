@@ -89,7 +89,9 @@ function MessageBoxHeader({ recipientType, data, userId }) {
 
         <h1>
           {isUser && (
-            <a href={`/users/${data.id}`}>{`${data.firstName} ${data.lastName}`}</a>
+            <Link to={`/users/${data.id}`} viewTransition>
+              {`${data.firstName} ${data.lastName}`}
+            </Link>
           )}
 
           {isGroup && data.name}
