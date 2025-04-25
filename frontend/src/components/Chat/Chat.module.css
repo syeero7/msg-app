@@ -261,6 +261,9 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .header h1 > a:hover {
+    text-decoration: underline;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -293,7 +296,4 @@
   .hasFile svg {
     color: hsl(from var(--primary) h s 45%);
   }
-}
-
-@media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
 }

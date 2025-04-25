@@ -118,6 +118,14 @@
   .groups {
     max-height: calc(100vh - 115px - 88px - 2em);
   }
+
+  .container {
+    padding-top: unset;
+
+    & header {
+      min-height: 115px;
+    }
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

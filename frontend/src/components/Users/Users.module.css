@@ -40,7 +40,7 @@
   display: flex;
   justify-content: space-around;
   font-size: 1.2em;
-  margin-top: 1.2em;
+  margin-top: 0.9em;
 
   & a {
     padding: 0.3em 0.8em;
@@ -75,6 +75,14 @@
 @media screen and (max-width: 60em) {
   .users {
     max-height: calc(100vh - 115px - 88px - 2em);
+  }
+
+  .container {
+    padding-top: unset;
+
+    & header {
+      min-height: 115px;
+    }
   }
 }
 
