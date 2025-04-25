@@ -8,6 +8,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import UserChat, { getLoader as getUserChatLoader } from "./pages/UserChat";
 import GroupChat, { getLoader as getGroupChatLoader } from "./pages/GroupChat";
+import UserProfile, { loader as userProfileLoader } from "./pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,11 @@ const router = createBrowserRouter([
                 loader: getGroupChatLoader("messages"),
               },
             ],
+          },
+          {
+            path: "/users/:userId",
+            Component: UserProfile,
+            loader: userProfileLoader,
           },
         ],
       },
