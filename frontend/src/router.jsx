@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import UserChat, { getLoader as getUserChatLoader } from "./pages/UserChat";
 import GroupChat, { getLoader as getGroupChatLoader } from "./pages/GroupChat";
 import UserProfile, { loader as userProfileLoader } from "./pages/UserProfile";
+import EditProfile, { loader as editProfileLoader } from "./pages/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,11 @@ const router = createBrowserRouter([
             path: "/users/:userId",
             Component: UserProfile,
             loader: userProfileLoader,
+          },
+          {
+            path: "/profile/edit",
+            Component: EditProfile,
+            loader: editProfileLoader,
           },
         ],
       },

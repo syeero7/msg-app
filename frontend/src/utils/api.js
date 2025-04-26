@@ -40,11 +40,14 @@ export const getUserById = (id) => {
   return fetch(`${API_URL}/users/${id}`, options);
 };
 
-export const updateUserAvatar = (body) => {
+export const updateUserAvatar = (value) => {
+  const formData = new FormData();
+  formData.append("avatar", value);
+
   const options = {
     method: "PUT",
     headers: getAuthorizationHeader(),
-    body,
+    body: formData,
   };
 
   return fetch(`${API_URL}/users/avatar`, options);
