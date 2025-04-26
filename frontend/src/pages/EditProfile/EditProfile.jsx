@@ -143,7 +143,7 @@ const useFormController = (avatarState, prevAboutMe) => {
     }
 
     if (errorResponses.length === 0) {
-      navigate("/profile/edit", { replace: true });
+      navigate("/profile/edit", { replace: true, viewTransition: true });
       return;
     }
 

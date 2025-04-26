@@ -19,6 +19,7 @@ function Navbar() {
         <li>
           <NavLink
             to="/chat/users/all"
+            viewTransition
             className={`${styles.item} ${match ? "active" : ""}`}>
             <Users />
             <span>Users</span>
@@ -26,14 +27,14 @@ function Navbar() {
         </li>
 
         <li>
-          <NavLink to="/chat/groups" className={styles.item}>
+          <NavLink to="/chat/groups" className={styles.item} viewTransition>
             <LayoutGrid />
             <span>Groups</span>
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="/profile/edit" className={styles.item}>
+          <NavLink to="/profile/edit" className={styles.item} viewTransition>
             <UserPen />
             <span>Edit profile</span>
           </NavLink>

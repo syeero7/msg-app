@@ -74,7 +74,7 @@ function MessageBoxHeader({ recipientType, data, userId }) {
     : async () => {
         const res = await updateGroupMembers(data.id, { add: [], remove: [userId] });
         if (!res.ok) throw res;
-        navigate("/chat/groups", { replace: true });
+        navigate("/chat/groups", { replace: true, viewTransition: true });
       };
 
   return (
@@ -203,7 +203,10 @@ const useFormController = (recipientType, recipientId) => {
     }
 
     if (fetchSuccessful) {
-      navigate(`/chat/${recipientType}s/${recipientId}`, { replace: true });
+      navigate(`/chat/${recipientType}s/${recipientId}`, {
+        replace: true,
+        viewTransition: true,
+      });
       return;
     }
 

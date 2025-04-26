@@ -52,7 +52,7 @@ const useFormController = () => {
     const res = await createUser(body);
 
     if (res.ok) {
-      navigate("/sign-in", { replace: true });
+      navigate("/sign-in", { replace: true, viewTransition: true });
       return;
     }
 

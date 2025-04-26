@@ -90,13 +90,11 @@ const useFormController = () => {
     const res = await createGroup(body);
 
     if (res.ok) {
-      navigate("/chat/groups", { replace: true });
+      navigate("/chat/groups", { replace: true, viewTransition: true });
       return;
     }
 
     const { errors: err } = await res.json();
-    console.log(err);
-
     setError(err);
   };
 
