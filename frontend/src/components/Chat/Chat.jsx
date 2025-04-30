@@ -5,11 +5,7 @@ import { formatRelative } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { CornerUpLeft, Settings, ChevronLeft, Send, Camera } from "lucide-react";
-import {
-  sendDirectMessage,
-  sendGroupMessages,
-  updateGroupMembers,
-} from "../../utils/api";
+import { removeMember, sendDirectMessage, sendGroupMessages } from "../../utils/api";
 import { useAuth } from "../AuthProvider";
 import styles from "./Chat.module.css";
 
@@ -72,7 +68,7 @@ function MessageBoxHeader({ recipientType, data, userId }) {
   const handleClick = isCreator
     ? null
     : async () => {
-        const res = await updateGroupMembers(data.id, { add: [], remove: [userId] });
+        const res = await removeMember(data.id, userId);
         if (!res.ok) throw res;
         navigate("/chat/groups", { replace: true, viewTransition: true });
       };
@@ -101,7 +97,7 @@ function MessageBoxHeader({ recipientType, data, userId }) {
       {isGroup && (
         <div>
           {isCreator ? (
-            <Link to={`/groups/${data.id}`} viewTransition>
+            <Link to={`/groups/${data.id}/members/add`} viewTransition>
               <Settings />
             </Link>
           ) : (
