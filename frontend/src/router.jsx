@@ -10,6 +10,10 @@ import UserChat, { getLoader as getUserChatLoader } from "./pages/UserChat";
 import GroupChat, { getLoader as getGroupChatLoader } from "./pages/GroupChat";
 import UserProfile, { loader as userProfileLoader } from "./pages/UserProfile";
 import EditProfile, { loader as editProfileLoader } from "./pages/EditProfile";
+import GroupSettings, {
+  getLoader as getMembersLoader,
+  getAction as getMembersAction,
+} from "./pages/GroupSettings";
 
 const router = createBrowserRouter([
   {
@@ -63,14 +67,41 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/users/:userId",
+            path: "users/:userId",
             Component: UserProfile,
             loader: userProfileLoader,
           },
           {
-            path: "/profile/edit",
+            path: "profile/edit",
             Component: EditProfile,
             loader: editProfileLoader,
+          },
+          {
+            path: "groups/:groupId/members",
+            children: [
+              {
+                path: "add",
+                Component: GroupSettings,
+                loader: getMembersLoader("add"),
+                children: [
+                  {
+                    path: ":memberId",
+                    action: getMembersAction("add"),
+                  },
+                ],
+              },
+              {
+                path: "remove",
+                Component: GroupSettings,
+                loader: getMembersLoader("remove"),
+                children: [
+                  {
+                    path: ":memberId",
+                    action: getMembersAction("remove"),
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

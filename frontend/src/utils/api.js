@@ -90,6 +90,22 @@ export const getGroupById = (id) => {
   return fetch(`${API_URL}/groups/${id}`, options);
 };
 
+export const getMembers = (groupId) => {
+  const options = {
+    headers: getAuthorizationHeader(),
+  };
+
+  return fetch(`${API_URL}/groups/${groupId}/members`, options);
+};
+
+export const getNonMembers = (groupId) => {
+  const options = {
+    headers: getAuthorizationHeader(),
+  };
+
+  return fetch(`${API_URL}/groups/${groupId}/nonmembers`, options);
+};
+
 export const createGroup = (body) => {
   const options = {
     method: "POST",
@@ -100,14 +116,22 @@ export const createGroup = (body) => {
   return fetch(`${API_URL}/groups`, options);
 };
 
-export const updateGroupMembers = (groupId, body) => {
+export const addMember = (groupId, memberId) => {
   const options = {
     method: "PUT",
-    headers: getHeaders(),
-    body: JSON.stringify(body),
+    headers: getAuthorizationHeader(),
   };
 
-  return fetch(`${API_URL}/groups/${groupId}/members`, options);
+  return fetch(`${API_URL}/groups/${groupId}/members/${memberId}`, options);
+};
+
+export const removeMember = (groupId, memberId) => {
+  const options = {
+    method: "DELETE",
+    headers: getAuthorizationHeader(),
+  };
+
+  return fetch(`${API_URL}/groups/${groupId}/members/${memberId}`, options);
 };
 
 export const deleteGroup = (groupId) => {
