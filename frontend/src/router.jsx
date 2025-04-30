@@ -1,16 +1,23 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import App from "./App";
-import RouteController from "./components/RouteController";
+const App = lazy(() => import("./App"));
+const RouteController = lazy(() => import("./components/RouteController"));
 
-import Home from "./pages/Home";
-import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";
-import UserChat, { getLoader as getUserChatLoader } from "./pages/UserChat";
-import GroupChat, { getLoader as getGroupChatLoader } from "./pages/GroupChat";
-import UserProfile, { loader as userProfileLoader } from "./pages/UserProfile";
-import EditProfile, { loader as editProfileLoader } from "./pages/EditProfile";
-import GroupSettings, {
+const Home = lazy(() => import("./pages/Home"));
+const Signin = lazy(() => import("./pages/Signin"));
+const Signup = lazy(() => import("./pages/Signup"));
+const UserChat = lazy(() => import("./pages/UserChat"));
+const GroupChat = lazy(() => import("./pages/GroupChat"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+const EditProfile = lazy(() => import("./pages/EditProfile"));
+const GroupSettings = lazy(() => import("./pages/GroupSettings"));
+
+import { getLoader as getUserChatLoader } from "./pages/UserChat";
+import { getLoader as getGroupChatLoader } from "./pages/GroupChat";
+import { loader as userProfileLoader } from "./pages/UserProfile";
+import { loader as editProfileLoader } from "./pages/EditProfile";
+import {
   getLoader as getMembersLoader,
   getAction as getMembersAction,
 } from "./pages/GroupSettings";
