@@ -53,8 +53,14 @@ function DeleteGroup({ groupId }) {
     navigate("/chat/groups", { replace: true, viewTransition: true });
   };
 
+  const handleSubmit = (e) => {
+    if (!confirm("Are you sure you want to delete this group ?")) {
+      e.preventDefault();
+    }
+  };
+
   return (
-    <form action={formAction} className={styles.deleteGroup}>
+    <form action={formAction} className={styles.deleteGroup} onSubmit={handleSubmit}>
       <SubmitButton>Delete group</SubmitButton>
     </form>
   );
