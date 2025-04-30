@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 const App = lazy(() => import("./App"));
 const RouteController = lazy(() => import("./components/RouteController"));
 const Fallback = lazy(() => import("./pages/Fallback"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 
 const Home = lazy(() => import("./pages/Home"));
 const Signin = lazy(() => import("./pages/Signin"));
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
     path: "/",
     Component: App,
     HydrateFallback: Fallback,
+    ErrorBoundary: ErrorPage,
     children: [
       {
         element: <RouteController type="public" />,
