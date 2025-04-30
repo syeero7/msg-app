@@ -6,7 +6,7 @@ function GroupSettings() {
   return (
     <div className={`chat-layout ${styles.reverse}`}>
       <div>
-        <div className={styles.hide}>
+        <div className={styles.container}>
           <Navbar />
         </div>
         <div className="chat-contacts hide-element"></div>
