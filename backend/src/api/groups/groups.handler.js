@@ -18,22 +18,45 @@ export const getUserGroups = asyncHandler(async (req, res) => {
 
 export const getUserGroupById = asyncHandler(async (req, res) => {
   const { groupId } = req.params;
-  const group = await prisma.group.findUnique({
-    where: { id: groupId },
-    include: {
-      members: {
-        include: {
-          user: {
-            omit: {
-              password: true,
-            },
-          },
-        },
+  const group = await prisma.group.findUnique({ where: { id: groupId } });
+
+  res.json({ group });
+});
+
+export const getMembersByGroupId = asyncHandler(async (req, res) => {
+  const { groupId } = req.params;
+  const userId = req.user.id;
+  const members = await prisma.userGroup.findMany({
+    where: {
+      groupId,
+      userId: { not: userId },
+    },
+    select: {
+      user: {
+        omit: { password: true },
       },
     },
   });
 
-  res.json({ group });
+  res.json({ members: members.map(({ user }) => user) });
+});
+
+export const getNonMembersByGroupId = asyncHandler(async (req, res) => {
+  const { groupId } = req.params;
+  const users = await prisma.user.findMany({
+    where: {
+      NOT: {
+        groups: {
+          some: {
+            groupId,
+          },
+        },
+      },
+    },
+    omit: { password: true },
+  });
+
+  res.json({ users });
 });
 
 export const createNewGroup = asyncHandler(async (req, res) => {
@@ -56,38 +79,19 @@ export const createNewGroup = asyncHandler(async (req, res) => {
   res.sendStatus(201);
 });
 
-export const updateGroupMembers = asyncHandler(async (req, res) => {
-  const { groupId } = req.params;
-  const { add: addUserIds, remove: removeUserIds } = req.body.userIds;
-  const transactions = [];
+export const addMember = asyncHandler(async (req, res) => {
+  const { memberId, groupId } = req.params;
 
-  if (addUserIds.length) {
-    transactions.push(
-      prisma.group.update({
-        where: { id: groupId },
-        data: {
-          members: {
-            createMany: { data: addUserIds.map((userId) => ({ userId })) },
-          },
+  await prisma.group.update({
+    where: { id: groupId },
+    data: {
+      members: {
+        create: {
+          userId: memberId,
         },
-      })
-    );
-  }
-
-  if (removeUserIds.length) {
-    transactions.push(
-      prisma.userGroup.deleteMany({
-        where: {
-          groupId,
-          userId: {
-            in: removeUserIds,
-          },
-        },
-      })
-    );
-  }
-
-  await prisma.$transaction(transactions);
+      },
+    },
+  });
 
   res.sendStatus(204);
 });
@@ -98,6 +102,21 @@ export const deleteGroup = asyncHandler(async (req, res) => {
   await prisma.group.delete({
     where: {
       id: groupId,
+    },
+  });
+
+  res.sendStatus(204);
+});
+
+export const removeMember = asyncHandler(async (req, res) => {
+  const { memberId, groupId } = req.params;
+
+  const group = await prisma.group.findUnique({ where: { id: groupId } });
+  if (memberId === group.creatorId) return res.sendStatus(400);
+
+  await prisma.userGroup.delete({
+    where: {
+      userId_groupId: { userId: memberId, groupId },
     },
   });
 
