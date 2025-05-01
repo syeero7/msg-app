@@ -9,7 +9,7 @@ export const getAction = (type) => {
         const res = await addMember(groupId, memberId);
         if (!res.ok) throw res;
 
-        return redirect(`/groups/${groupId}/add/members`);
+        return redirect(`/groups/${groupId}/members/add`);
       };
 
     case "remove":
@@ -18,7 +18,7 @@ export const getAction = (type) => {
         const res = await removeMember(groupId, memberId);
         if (!res.ok) throw res;
 
-        return redirect(`/groups/${groupId}/remove/members`);
+        return redirect(`/groups/${groupId}/members/remove`);
       };
   }
 };
