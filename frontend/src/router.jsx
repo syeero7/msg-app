@@ -9,20 +9,6 @@ const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const Home = lazy(() => import("./pages/Home"));
 const Signin = lazy(() => import("./pages/Signin"));
 const Signup = lazy(() => import("./pages/Signup"));
-const UserChat = lazy(() => import("./pages/UserChat"));
-const GroupChat = lazy(() => import("./pages/GroupChat"));
-const UserProfile = lazy(() => import("./pages/UserProfile"));
-const EditProfile = lazy(() => import("./pages/EditProfile"));
-const GroupSettings = lazy(() => import("./pages/GroupSettings"));
-
-import { getLoader as getUserChatLoader } from "./pages/UserChat";
-import { getLoader as getGroupChatLoader } from "./pages/GroupChat";
-import { loader as userProfileLoader } from "./pages/UserProfile";
-import { loader as editProfileLoader } from "./pages/EditProfile";
-import {
-  getLoader as getMembersLoader,
-  getAction as getMembersAction,
-} from "./pages/GroupSettings";
 
 const router = createBrowserRouter([
   {
@@ -47,18 +33,36 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "all",
-                Component: UserChat,
-                loader: getUserChatLoader("all"),
+                lazy: async () => {
+                  const module = await import("./pages/UserChat");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("all"),
+                  };
+                },
               },
               {
                 path: "online",
-                Component: UserChat,
-                loader: getUserChatLoader("online"),
+                lazy: async () => {
+                  const module = await import("./pages/UserChat");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("online"),
+                  };
+                },
               },
               {
                 path: ":userId",
-                Component: UserChat,
-                loader: getUserChatLoader("messages"),
+                lazy: async () => {
+                  const module = await import("./pages/UserChat");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("messages"),
+                  };
+                },
               },
             ],
           },
@@ -67,48 +71,96 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                Component: GroupChat,
-                loader: getGroupChatLoader("all"),
+                lazy: async () => {
+                  const module = await import("./pages/GroupChat");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("all"),
+                  };
+                },
               },
               {
                 path: ":groupId",
-                Component: GroupChat,
-                loader: getGroupChatLoader("messages"),
+                lazy: async () => {
+                  const module = await import("./pages/GroupChat");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("messages"),
+                  };
+                },
               },
             ],
           },
           {
             path: "users/:userId",
-            Component: UserProfile,
-            loader: userProfileLoader,
+            lazy: async () => {
+              const module = await import("./pages/UserProfile");
+
+              return {
+                Component: module.default,
+                loader: module.loader,
+              };
+            },
           },
           {
             path: "profile/edit",
-            Component: EditProfile,
-            loader: editProfileLoader,
+            lazy: async () => {
+              const module = await import("./pages/EditProfile");
+
+              return {
+                Component: module.default,
+                loader: module.loader,
+              };
+            },
           },
           {
             path: "groups/:groupId/members",
             children: [
               {
                 path: "add",
-                Component: GroupSettings,
-                loader: getMembersLoader("add"),
+                lazy: async () => {
+                  const module = await import("./pages/GroupSettings");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("add"),
+                  };
+                },
                 children: [
                   {
                     path: ":memberId",
-                    action: getMembersAction("add"),
+                    lazy: async () => {
+                      const module = await import("./pages/GroupSettings");
+
+                      return {
+                        action: module.getAction("add"),
+                      };
+                    },
                   },
                 ],
               },
               {
                 path: "remove",
-                Component: GroupSettings,
-                loader: getMembersLoader("remove"),
+                lazy: async () => {
+                  const module = await import("./pages/GroupSettings");
+
+                  return {
+                    Component: module.default,
+                    loader: module.getLoader("remove"),
+                  };
+                },
                 children: [
                   {
                     path: ":memberId",
-                    action: getMembersAction("remove"),
+                    lazy: async () => {
+                      const module = await import("./pages/GroupSettings");
+
+                      return {
+                        action: module.getAction("remove"),
+                      };
+                    },
                   },
                 ],
               },
