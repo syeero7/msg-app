@@ -6,7 +6,8 @@
 }
 
 :root {
-  --ff-sans-serif: "Inter", sans-serif;
+  --ff-sans-serif: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
+    sans-serif;
 
   --text: oklch(12.72% 0.031 155.06);
   --background: oklch(99.09% 0.013 159.93);
