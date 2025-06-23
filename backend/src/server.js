@@ -7,7 +7,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import prisma from "./lib/prisma-client.js";
 import auth from "./routes/auth.js";
 import users from "./routes/users.js";
-// import groups from "./routes/groups.js";
+import groups from "./routes/groups.js";
 // import messages from "./routes/messages.js";
 
 const server = express();
@@ -74,18 +74,14 @@ server.use(async (req, res, next) => {
   const userId = req.user.id;
 
   await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      lastActiveAt: new Date(),
-    },
+    where: { id: userId },
+    data: { lastActiveAt: new Date() },
   });
 
   next();
 });
 server.use("users", users);
-// server.use("groups");
+server.use("groups", groups);
 // server.use("messages");
 
 server.use((err, req, res, next) => {
