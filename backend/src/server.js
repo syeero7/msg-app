@@ -6,7 +6,7 @@ import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 import { Strategy as LocalStrategy } from "passport-local";
 import prisma from "./lib/prisma-client.js";
 import auth from "./routes/auth.js";
-// import users from "./routes/users.js";
+import users from "./routes/users.js";
 // import groups from "./routes/groups.js";
 // import messages from "./routes/messages.js";
 
@@ -84,7 +84,7 @@ server.use(async (req, res, next) => {
 
   next();
 });
-// server.use("users");
+server.use("users", users);
 // server.use("groups");
 // server.use("messages");
 
