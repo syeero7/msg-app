@@ -1,30 +1,98 @@
 import express from "express";
 import cors from "cors";
-import "./config/passport.js";
-import routes from "./api/index.js";
-import authenticate from "./middleware/authenticate.js";
-import errorHandler from "./middleware/error-handler.js";
-import updateUserLastActiveAt from "./middleware/update-user-last-active-at.js";
-import { corsOptions } from "./config/cors.js";
+import bcrypt from "bcryptjs";
+import passport from "passport";
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
+import { Strategy as LocalStrategy } from "passport-local";
+import prisma from "./lib/prisma-client.js";
+import auth from "./routes/auth.js";
+// import users from "./routes/users.js";
+// import groups from "./routes/groups.js";
+// import messages from "./routes/messages.js";
 
 const server = express();
 
-server.use(cors(corsOptions));
+const { NODE_ENV, ALLOWED_ORIGIN, SECRET, PORT } = process.env;
 
+server.use(
+  cors({
+    origin: (origin, cb) => {
+      if (ALLOWED_ORIGIN === origin || NODE_ENV === "development") {
+        cb(null, true);
+        return;
+      }
+
+      cb(new Error("Not allowed by CORS"));
+    },
+  })
+);
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 
-server.use("/auth", routes.auth);
-server.use(authenticate);
-server.use(updateUserLastActiveAt);
-server.use("/users", routes.users);
-server.use("/groups", routes.groups);
-server.use("/messages", routes.messages);
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+    },
+    async (email, password, done) => {
+      try {
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) return done(null, false, { message: "User not found" });
 
-server.use(errorHandler);
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) return done(null, false, { message: "Incorrect password" });
 
-const { PORT } = process.env;
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: SECRET,
+    },
+    async (payload, done) => {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { id: payload.uid },
+        });
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
+);
+
+server.use("auth", auth);
+server.use(passport.authenticate("jwt", { session: false }));
+server.use(async (req, res, next) => {
+  const userId = req.user.id;
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      lastActiveAt: new Date(),
+    },
+  });
+
+  next();
+});
+// server.use("users");
+// server.use("groups");
+// server.use("messages");
+
+server.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: err.message || "Server error" });
+});
 
 server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`🚀 http://localhost:${PORT}`);
 });
