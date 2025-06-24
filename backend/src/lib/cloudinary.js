@@ -7,13 +7,9 @@ export async function uploadFile(file, foldername) {
   const base64 = Buffer.from(buffer).toString("base64");
   const dataURI = `data:${mimetype};base64,${base64}`;
   const folder = `${FOLDER}/${foldername}`;
-  const {
-    secure_url: url,
-    public_id: publicId,
-    created_at: uploadedAt,
-  } = await cloudinary.uploader.upload(dataURI, { folder });
+  const { secure_url } = await cloudinary.uploader.upload(dataURI, { folder });
 
-  return { url, publicId, uploadedAt };
+  return secure_url;
 }
 
 export async function deleteFile(foldername) {

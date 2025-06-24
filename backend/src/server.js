@@ -8,7 +8,7 @@ import prisma from "./lib/prisma-client.js";
 import auth from "./routes/auth.js";
 import users from "./routes/users.js";
 import groups from "./routes/groups.js";
-// import messages from "./routes/messages.js";
+import messages from "./routes/messages.js";
 
 const server = express();
 
@@ -82,7 +82,7 @@ server.use(async (req, res, next) => {
 });
 server.use("users", users);
 server.use("groups", groups);
-// server.use("messages");
+server.use("messages", messages);
 
 server.use((err, req, res, next) => {
   console.error(err);
