@@ -59,9 +59,9 @@ export const login = asyncHandler(async (req, res, next) => {
   passport.authenticate(
     "local",
     { session: false },
-    async (error, user, { message }) => {
+    async (error, user, info) => {
       if (error) return next(error);
-      if (!user) return res.status(401).json({ message });
+      if (!user) return res.status(401).json({ message: info.message });
 
       const token = jwt.sign({ uid: user.id }, process.env.SECRET);
 

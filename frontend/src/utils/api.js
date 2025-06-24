@@ -11,7 +11,7 @@ export const createUser = (body) => {
     headers: getJSONHeader(),
   };
 
-  return fetch(`${API_URL}/auth/signup`, options);
+  return fetch(`${API_URL}/auth/sign-up`, options);
 };
 
 export const signinUser = (body) => {
@@ -21,7 +21,7 @@ export const signinUser = (body) => {
     headers: getJSONHeader(),
   };
 
-  return fetch(`${API_URL}/auth/signin`, options);
+  return fetch(`${API_URL}/auth/login`, options);
 };
 
 export const getUsers = (online = false) => {

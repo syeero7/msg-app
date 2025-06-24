@@ -68,7 +68,7 @@ passport.use(
   )
 );
 
-server.use("auth", auth);
+server.use("/auth", auth);
 server.use(passport.authenticate("jwt", { session: false }));
 server.use(async (req, res, next) => {
   const userId = req.user.id;
@@ -80,9 +80,9 @@ server.use(async (req, res, next) => {
 
   next();
 });
-server.use("users", users);
-server.use("groups", groups);
-server.use("messages", messages);
+server.use("/users", users);
+server.use("/groups", groups);
+server.use("/messages", messages);
 
 server.use((err, req, res, next) => {
   console.error(err);

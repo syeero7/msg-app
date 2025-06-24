@@ -215,7 +215,7 @@ export const createGroupMessageImage = [
 
 async function authorizeRequest(req, res, next) {
   const result = validationResult(req);
-  if (!result.isEmpty()) return res.sendStatus(403);
+  if (!result.isEmpty()) return res.sendStatus(404);
 
   const userId = req.user.id;
   const { groupId } = req.params;
