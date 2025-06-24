@@ -39,20 +39,7 @@ export const getMembersByGroupId = [
 
     const { groupId } = req.params;
     const userId = req.user.id;
-    const members = await prisma.userGroup.findMany({
-      where: {
-        groupId,
-        userId: { not: userId },
-      },
-      select: {
-        user: {
-          omit: { password: true },
-        },
-      },
-    });
-
-    // test -----------------------------------------------------
-    const a = await prisma.user.findMany({
+    const members = await prisma.user.findMany({
       where: {
         NOT: { id: userId },
         groups: {
@@ -66,7 +53,7 @@ export const getMembersByGroupId = [
       },
     });
 
-    res.json({ members: members.map(({ user }) => user), a });
+    res.json({ members });
   }),
 ];
 
