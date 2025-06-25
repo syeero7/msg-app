@@ -7,7 +7,7 @@ router.get("/", controllers.getUsers);
 router.get("/online", controllers.getOnlineUsers);
 router.get("/:userId", controllers.getUserById);
 router.put("/avatar", controllers.updateProfileImageUrl);
-router.put("/about", controllers.deleteProfileImageUrl);
-router.delete("/avatar", controllers.updateUserProfileAboutMe);
+router.put("/about", controllers.updateUserProfileAboutMe);
+router.delete("/avatar", controllers.deleteProfileImageUrl);
 
 export default router;

@@ -143,10 +143,10 @@ const messageImageValidation = [
     }
 
     const { height, width } = await sharp(buffer).metadata();
-    if (height !== imageSize || width !== imageSize) {
-      return res
-        .status(400)
-        .json({ message: `Image must be ${imageSize} x ${imageSize}` });
+    if (height > imageSize || width > imageSize) {
+      return res.status(400).json({
+        message: `Image must be less than ${imageSize} x ${imageSize}`,
+      });
     }
 
     next();
